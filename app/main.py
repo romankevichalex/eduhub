@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+# app/main.py
+
+from fastapi import FastAPI, Depends
+
 
 app = FastAPI(
-    title="EduHub backend",
+    title="eduhub",
     description="",
     version="0.1.0",
 )
@@ -9,8 +12,5 @@ app = FastAPI(
 
 @app.get("/")
 def health_check():
-    return {
-        "status": "ok",
-        "message": "FastAPI backend is running!",
-        "project": "EduHub",
-    }
+    return {"status": "ok", "message": ""}
+
