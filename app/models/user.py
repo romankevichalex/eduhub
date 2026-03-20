@@ -1,7 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from . import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -11,5 +9,5 @@ class User(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
-    role = Column(String, nullable=False)  # student / teacher / admin
+    role = Column(String, nullable=False)      # student / teacher / admin
     is_verified = Column(Boolean, default=False)
