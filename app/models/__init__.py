@@ -8,4 +8,3 @@ from .user import User
 #from .comment import PostComment
 #from .material import SubjectMaterial
 #from .chat import ChatMessage
-#test2
