@@ -1,10 +1,11 @@
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
+
 Base = declarative_base()
 
-from .user import User
-#from .subject import Subject
-#from .enrollment import Enrollment
-#from .post import SubjectPost
-#from .comment import PostComment
-#from .material import SubjectMaterial
-#from .chat import ChatMessage
+from app.models.user import User
+from app.models.subject import Subject
+from app.models.enrollment import Enrollment
+from app.models.post import SubjectPost
+from app.models.comment import PostComment
+from app.models.material import SubjectMaterial
+from app.models.chat import ChatMessage
