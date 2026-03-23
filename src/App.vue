@@ -1,15 +1,19 @@
 <template>
-    <div>
-        
-    </div>
+     <router-view />
 </template>
 
-<script>
-export default {
-    name: "eduhub"
-}
-</script>
+<script setup>
+import { onMounted } from 'vue'
+import { useAuthStore } from './stores/authStore'
 
+const authStore = useAuthStore()
+
+onMounted(() => {
+  authStore.checkAutoLogin()
+})
+
+</script>
+    
 <style>
 
 </style>
