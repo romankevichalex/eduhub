@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from app.db.init_db import create_tables
 from app.routers import auth, subjects, enrollments, posts, chat, materials, admin
 
 app = FastAPI(
@@ -7,10 +6,6 @@ app = FastAPI(
     description="",
     version="0.1.0",
 )
-
-@app.on_event("startup")
-def on_startup():
-    create_tables()
 
 @app.get("/")
 def health_check():
