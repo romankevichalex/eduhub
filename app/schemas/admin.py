@@ -6,6 +6,7 @@ class UserAdminOut(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
+    middle_name: str
     role: str
     is_verified: bool
 

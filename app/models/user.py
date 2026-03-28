@@ -8,6 +8,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
+    middle_name = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(String, nullable=False)      # student / teacher / admin
     is_verified = Column(Boolean, default=False)

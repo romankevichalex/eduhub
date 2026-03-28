@@ -4,6 +4,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
+    middle_name: str
     password: str
     role: str
 
@@ -12,6 +13,7 @@ class UserOut(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
+    middle_name: str
     role: str
     is_verified: bool
 

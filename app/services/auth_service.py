@@ -38,6 +38,7 @@ def register_user(db: Session, data: UserCreate) -> User:
         email=data.email,
         first_name=data.first_name,
         last_name=data.last_name,
+        middle_name=data.middle_name,
         hashed_password=hash_password(data.password),
         role=data.role,
     )
