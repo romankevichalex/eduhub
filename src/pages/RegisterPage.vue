@@ -115,7 +115,16 @@ const handleRegister = async () => {
 
   loading.value = true
   error.value = ''
-  const success = await authStore.register(form)
+
+  const registerData = { //преобразования для бэка
+    email: form.email,
+    first_name: form.firstName,
+    last_name: form.lastName,
+    password: form.password,
+    role: form.role,
+  }
+
+  const success = await authStore.register(registerData)
   loading.value = false
   if (success) {
     // После успешной регистрации можно автоматически войти или перенаправить на страницу входа

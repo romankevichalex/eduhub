@@ -60,7 +60,7 @@ const authStore = useAuthStore()
 const handleLogin = async () => {
   loading.value = true
   error.value = ''
-  const success = await authStore.login(email.value, password.value)
+  const success = await authStore.login(email.value, password.value, autoLogin.value)
   loading.value = false
   if (success) {
     router.push('/subjects')

@@ -4,7 +4,7 @@ import api from '@/services/api'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
-    token: localStorage.getItem('token') || null,
+    token: localStorage.getItem('token') || sessionStorage.getItem('token') || null,
     loading: false,
     error: null,
   }),
@@ -12,13 +12,17 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state) => !!state.token,
   },
   actions: {
-    async login(email, password) {
+    async login(email, password, rememberMe = false) {
       this.loading = true
       this.error = null
       try {
         const response = await api.post('/api/v1/auth/login', { email, password })
-        this.token = response.data.token
-        localStorage.setItem('token', this.token)
+        this.token = response.data.access_token
+        if (rememberMe) {
+          localStorage.setItem('token', token)
+        } else {
+          sessionStorage.setItem('token', token)
+        }
         await this.fetchMe()
         return true
       } catch (err) {
@@ -59,6 +63,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.user = null
       localStorage.removeItem('token')
+      sessionStorage.removeItem('token')
     },
   },
 })
