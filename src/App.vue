@@ -9,7 +9,7 @@ import { useAuthStore } from './stores/authStore'
 const authStore = useAuthStore()
 
 onMounted(() => {
-  authStore.checkAutoLogin()
+  authStore.fetchMe()
 })
 
 </script>

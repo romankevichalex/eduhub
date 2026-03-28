@@ -1,48 +1,64 @@
 import { defineStore } from 'pinia'
+import api from '@/services/api'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
-    isAuthenticated: false,
-    autoLogin: false
+    token: localStorage.getItem('token') || null,
+    loading: false,
+    error: null,
   }),
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+  },
   actions: {
-    // Мок-вход – просто имитируем успешный ответ
-    async login(email, password, autoLogin) {
-      // Здесь потом будет реальный вызов API
-      // Имитируем задержку
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          // Условная проверка: если почта и пароль не пустые – успешно
-          if (email && password) {
-            this.user = { email }
-            this.isAuthenticated = true
-            this.autoLogin = autoLogin
-            // Сохраняем токен в localStorage, если нужно
-            if (autoLogin) {
-              localStorage.setItem('user', JSON.stringify({ email }))
-            }
-            resolve()
-          } else {
-            reject(new Error('Неверные данные'))
-          }
-        }, 500)
-      })
-    },
-    logout() {
-      this.user = null
-      this.isAuthenticated = false
-      this.autoLogin = false
-      localStorage.removeItem('user')
-    },
-    // Проверка автовхода при загрузке приложения
-    checkAutoLogin() {
-      const savedUser = localStorage.getItem('user')
-      if (savedUser) {
-        this.user = JSON.parse(savedUser)
-        this.isAuthenticated = true
-        this.autoLogin = true
+    async login(email, password) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await api.post('/api/v1/auth/login', { email, password })
+        this.token = response.data.token
+        localStorage.setItem('token', this.token)
+        await this.fetchMe()
+        return true
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Ошибка входа'
+        return false
+      } finally {
+        this.loading = false
       }
-    }
-  }
+    },
+
+    async register(userData) {
+      this.loading = true
+      this.error = null
+      try {
+        await api.post('/api/v1/auth/register', userData)
+        // после регистрации можно сразу залогиниться или перенаправить на страницу входа
+        return true
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Ошибка регистрации'
+        return false
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchMe() {
+      if (!this.token) return
+      try {
+        const response = await api.get('/api/v1/auth/me')
+        this.user = response.data
+      } catch (err) {
+        // если токен невалиден, очищаем его
+        this.logout()
+      }
+    },
+
+    logout() {
+      this.token = null
+      this.user = null
+      localStorage.removeItem('token')
+    },
+  },
 })

@@ -24,7 +24,11 @@
           </router-link>
         </div>
 
-        <BaseButton full-width @click="handleLogin">Войти</BaseButton>
+        <BaseButton full-width :disabled="loading" @click="handleLogin">
+          {{ loading ? 'Вход...' : 'Войти' }}
+        </BaseButton>
+
+        <div v-if="error" class="error-message">{{ error }}</div>
 
         <div class="register-row">
           <span class="register-text">Нет аккаунта?</span>
@@ -48,17 +52,20 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 const email = ref('')
 const password = ref('')
 const autoLogin = ref(false)
+const loading = ref(false)
+const error = ref('')
 const router = useRouter()
 const authStore = useAuthStore()
 
 const handleLogin = async () => {
-  try {
-    await authStore.login(email.value, password.value, autoLogin.value)
-    // После успешного входа переходим на страницу предметов
+  loading.value = true
+  error.value = ''
+  const success = await authStore.login(email.value, password.value)
+  loading.value = false
+  if (success) {
     router.push('/subjects')
-  } catch (error) {
-    // Здесь можно показать ошибку пользователю (например, alert или всплывающее уведомление)
-    alert(error.message)
+  } else {
+    error.value = authStore.error || 'Неверный email или пароль'
   }
 }
 </script>
@@ -73,7 +80,12 @@ const handleLogin = async () => {
   padding: 20px;
   box-sizing: border-box;
 }
-
+.error-message {
+  margin-top: 12px;
+  color: red;
+  font-size: 14px;
+  text-align: center;
+}
 .login-card {
   background: white;
   border-radius: 27px;
