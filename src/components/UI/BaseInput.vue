@@ -26,9 +26,12 @@ defineEmits(['update:modelValue'])
   border: 1px solid var(--gray-2);
   background: var(--gray-1);
   font-size: 16px;
-  color: var(--gray-3);
+  color: rgb(50, 50, 50);
   transition: border-color 0.2s;
   box-sizing: border-box;
+}
+.base-input::placeholder {
+  color: var(--gray-3); 
 }
 
 .base-input:focus {

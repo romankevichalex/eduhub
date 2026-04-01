@@ -22,7 +22,7 @@
         />
         <BaseInput
           v-model="form.patronymic"
-          placeholder="Отчество(необязательно)"
+          placeholder="Отчество"
           class="input-field"
         />
         <BaseInput
@@ -100,7 +100,7 @@ const authStore = useAuthStore()
 
 const handleRegister = async () => {
   // Валидация
-  if (!form.email || !form.firstName || !form.lastName || !form.password || !passwordConfirm.value) {
+  if (!form.email || !form.firstName || !form.lastName || !form.password || !passwordConfirm.value || !form.patronymic) {
     error.value = 'Заполните все поля'
     return
   }
@@ -120,6 +120,7 @@ const handleRegister = async () => {
     email: form.email,
     first_name: form.firstName,
     last_name: form.lastName,
+    middle_name: form.patronymic,
     password: form.password,
     role: form.role,
   }

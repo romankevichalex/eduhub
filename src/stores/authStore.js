@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', {
         await this.fetchMe()
         return true
       } catch (err) {
+        console.error('Login error details:', err.response?.data);
         this.error = err.response?.data?.message || 'Ошибка входа'
         return false
       } finally {
@@ -41,6 +42,7 @@ export const useAuthStore = defineStore('auth', {
         // после регистрации можно сразу залогиниться или перенаправить на страницу входа
         return true
       } catch (err) {
+        console.error('Registration error details:', err.response?.data);
         this.error = err.response?.data?.message || 'Ошибка регистрации'
         return false
       } finally {
