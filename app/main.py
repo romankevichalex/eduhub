@@ -1,3 +1,4 @@
+import subprocess
 from fastapi import FastAPI
 from app.routers import auth, subjects, enrollments, posts, chat, materials, admin
 
@@ -6,6 +7,10 @@ app = FastAPI(
     description="",
     version="0.1.0",
 )
+
+@app.on_event("startup")
+def startup():
+    subprocess.run(["alembic", "upgrade", "head"])
 
 @app.get("/")
 def health_check():
