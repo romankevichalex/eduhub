@@ -26,6 +26,10 @@ export const useAuthStore = defineStore('auth', {
         await this.fetchMe()
         return true
       } catch (err) {
+        if (!err.response) {
+          this.error = 'Нет соединения с сервером. Проверьте интернет'
+          return false
+        }
         console.error('Login error details:', err.response?.data)
         
         // Получаем статус и данные ошибки
@@ -62,8 +66,37 @@ export const useAuthStore = defineStore('auth', {
         // после регистрации можно сразу залогиниться или перенаправить на страницу входа
         return true
       } catch (err) {
+        if (!err.response) {
+          this.error = 'Нет соединения с сервером. Проверьте интернет'
+          return false
+        }
         console.error('Registration error details:', err.response?.data);
-        this.error = err.response?.data?.message || 'Ошибка регистрации'
+
+        const status = err.response.status
+        const data = err.response.data
+
+        // Обработка разных статусов
+        if (status === 400) {
+          this.error = data?.message || 'Пользователь с таким email уже зарегистрирован'
+        } else if (status === 409) {
+          // Часто 409 означает конфликт, например email уже существует
+          this.error = data?.message || 'Пользователь с таким email уже зарегистрирован'
+        } else if (status === 422) {
+          // Валидационная ошибка — можно попробовать вытащить детали
+          if (data?.errors) {
+            // Если ошибки приходят в виде объекта { email: ['...'], password: ['...'] }
+            const messages = Object.values(data.errors).flat()
+            this.error = messages.join(', ')
+          } else {
+            this.error = data?.message || 'Проверьте правильность введённых данных'
+          }
+        } else if (status === 429) {
+          this.error = 'Слишком много попыток регистрации. Попробуйте позже'
+        } else if (status >= 500) {
+          this.error = 'Сервер временно недоступен. Повторите попытку позже'
+        } else {
+          this.error = data?.message || 'Ошибка регистрации'
+        }
         return false
       } finally {
         this.loading = false
