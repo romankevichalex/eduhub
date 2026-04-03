@@ -19,15 +19,35 @@ export const useAuthStore = defineStore('auth', {
         const response = await api.post('/api/v1/auth/login', { email, password })
         this.token = response.data.access_token
         if (rememberMe) {
-          localStorage.setItem('token', token)
+          localStorage.setItem('token', this.token)
         } else {
-          sessionStorage.setItem('token', token)
+          sessionStorage.setItem('token', this.token)
         }
         await this.fetchMe()
         return true
       } catch (err) {
-        console.error('Login error details:', err.response?.data);
-        this.error = err.response?.data?.message || 'Ошибка входа'
+        console.error('Login error details:', err.response?.data)
+        
+        // Получаем статус и данные ошибки
+        const status = err.response?.status
+        const data = err.response?.data
+
+        // Формируем сообщение в зависимости от статуса
+        let userMessage = 'Ошибка входа'
+        if (status === 401) {
+          userMessage = data?.message || 'Неверный email или пароль'
+        } else if (status === 422) {
+          // Валидационная ошибка (например, неправильный формат email)
+          userMessage = data?.message || 'Проверьте правильность введённых данных'
+        } else if (status === 429) {
+          userMessage = 'Слишком много попыток входа. Попробуйте позже'
+        } else if (status >= 500) {
+          userMessage = 'Сервер временно недоступен. Повторите попытку позже'
+        } else if (status === 400) {
+          userMessage = data?.message || 'Некорректный запрос'
+        }
+        
+        this.error = userMessage
         return false
       } finally {
         this.loading = false
