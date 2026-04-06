@@ -5,33 +5,22 @@
       :class="{ active: activeTab === 'subjects' }"
       @click="setActive('subjects')"
     >
-      <span class="tab-icon">📚</span>
     </button>
     <button
       class="tab-btn"
       :class="{ active: activeTab === 'settings' }"
       @click="setActive('settings')"
     >
-      <span class="tab-icon">⚙️</span>
     </button>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
-
-const props = defineProps({
-  activeTab: {
-    type: String,
-    default: 'subjects'
-  }
+defineProps({
+  activeTab: { type: String, default: 'subjects' }
 })
-
 const emit = defineEmits(['update:activeTab'])
-
-const setActive = (tab) => {
-  emit('update:activeTab', tab)
-}
+const setActive = (tab) => emit('update:activeTab', tab)
 </script>
 
 <style scoped>
@@ -41,28 +30,29 @@ const setActive = (tab) => {
   left: 0;
   right: 0;
   display: flex;
-  justify-content: space-around;
   background: white;
-  border-top: 1px solid #eee;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid #f0f0f0;
   padding: 8px 0;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
 }
 .tab-btn {
   flex: 1;
-  background: none;
+  background: transparent;
   border: none;
-  padding: 12px;
-  border-radius: 27px;
-  background: white;
-  color: var(--main-color-b);
-  transition: all 0.2s;
+  padding: 10px 0;
   cursor: pointer;
-}
-.tab-btn.active {
-  background: linear-gradient(90deg, var(--main-color-b), var(--main-color-p));
-  color: white;
+  transition: all 0.2s;
 }
 .tab-icon {
-  font-size: 24px;
+  font-size: 26px;
+  color: #8e8e93; 
+}
+.tab-btn.active .tab-icon {
+  color: var(--main-color-b); 
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.tab-btn.active .tab-icon {
+  transform: scale(1.05);
 }
 </style>

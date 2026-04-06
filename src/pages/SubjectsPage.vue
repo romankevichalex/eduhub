@@ -2,38 +2,46 @@
   <div class="subjects-page">
     <TopBar />
 
-    <div class="subjects-container">
-      <SubjectCard
-        v-for="subject in subjects"
-        :key="subject.id"
-        :name="subject.name"
-        @click="goToSubject(subject.id)"
-      />
+    <div class="subjects-container" v-if="!subjectsStore.loading">
+      <div class="column">
+        <SubjectCard
+          v-for="subject in oddSubjects"
+          :key="subject.id"
+          :name="subject.name"
+          @click="goToSubject(subject.id)"
+        />
+      </div>
+      
+      <div class="column">
+        <SubjectCard
+          v-for="subject in evenSubjects"
+          :key="subject.id"
+          :name="subject.name"
+          @click="goToSubject(subject.id)"
+        />
+      </div>
     </div>
+    <div v-else class="loading">Загрузка...</div>
+    <div v-if="subjectsStore.error" class="error">{{ subjectsStore.error }}</div>
 
     <TabBar :activeTab="activeTab" @update:activeTab="handleTabChange" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useSubjectsStore } from '@/stores/subjectsStore'
 import TopBar from '@/components/layout/TopBar.vue'
 import TabBar from '@/components/layout/TabBar.vue'
 import SubjectCard from '@/components/subjects/SubjectCard.vue'
 
 const router = useRouter()
 const activeTab = ref('subjects')
+const subjectsStore = useSubjectsStore()
 
-// Мок-данные предметов – потом заменим на получение из API
-const subjects = ref([
-  { id: 1, name: 'Математика' },
-  { id: 2, name: 'Физика' },
-  { id: 3, name: 'Программирование' },
-  { id: 4, name: 'Базы данных' },
-  { id: 5, name: 'Английский язык' },
-  { id: 6, name: 'История' }
-])
+const evenSubjects = computed(() => subjectsStore.subjects.filter((_, idx) => idx % 2 === 0))
+const oddSubjects = computed(() => subjectsStore.subjects.filter((_, idx) => idx % 2 === 1))
 
 const goToSubject = (id) => {
   router.push(`/subjects/${id}`)
@@ -45,23 +53,40 @@ const handleTabChange = (tab) => {
     router.push('/settings')
   }
 }
+
+onMounted(() => {
+  subjectsStore.fetchSubjects()
+})
 </script>
 
 <style scoped>
+
 .subjects-page {
   min-height: 100vh;
   background: white;
+  display: bock;
+  flex-direction: column;
+  padding-bottom: 70px;
+}
+.column {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: 70px; /* чтобы контент не перекрывался таб-баром */
+  gap: 8px;
 }
-
 .subjects-container {
   flex: 1;
   padding: 16px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 8px;
+  gap: 12px;
+  align-items: flex-start;
+}
+.loading, .error {
+  text-align: center;
+  margin-top: 40px;
+  color: #666;
+}
+.error {
+  color: red;
 }
 </style>

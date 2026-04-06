@@ -9,7 +9,7 @@
 .top-bar {
   background: var(--gradient);
   padding: 20px 16px;
-  border-radius: 0 0 27px 27px;
+  border-bottom: 1px solid rgba(255,255,255,0.2); 
 }
 .top-bar-title {
   font-size: 24px;
