@@ -49,8 +49,8 @@
         </div>
       </div>
 
-      <div v-else-if="activeTab === 'ai'" class="ai-placeholder">
-        🤖 AI-ассистент скоро появится
+      <div v-else-if="activeTab === 'ai'" class="ai-chat-container">
+      <AIChat :subjectId="Number(subjectId)" />
       </div>
 
       <div v-else-if="activeTab === 'widgets'" class="widgets-placeholder">
@@ -63,6 +63,7 @@
 </template>
 
 <script setup>
+import AIChat from '@/components/chat/AIChat.vue'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePostsStore } from '@/stores/postsStore'
@@ -155,10 +156,20 @@ onMounted(() => {
 
 .tab-content {
   flex: 1;
-  padding: 16px;
+  display: flex;
+  flex-direction: column; 
+  padding: 0;
+  overflow: hidden;
+}
+.ai-chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .posts-list {
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
