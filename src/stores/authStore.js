@@ -17,7 +17,8 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
       try {
         const response = await api.post('/api/v1/auth/login', { email, password })
-        this.token = response.data.access_token
+        const token = response.data.access_token
+        this.token = token
         if (rememberMe) {
           localStorage.setItem('token', this.token)
         } else {
