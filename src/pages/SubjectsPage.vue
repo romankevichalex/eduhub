@@ -8,7 +8,7 @@
           v-for="subject in oddSubjects"
           :key="subject.id"
           :name="subject.name"
-          @click="goToSubject(subject.id)"
+          @click="goToSubject(subject.id, subject.name)"
         />
       </div>
       
@@ -17,7 +17,7 @@
           v-for="subject in evenSubjects"
           :key="subject.id"
           :name="subject.name"
-          @click="goToSubject(subject.id)"
+          @click="goToSubject(subject.id, subject.name)"
         />
       </div>
     </div>
@@ -43,8 +43,8 @@ const subjectsStore = useSubjectsStore()
 const evenSubjects = computed(() => subjectsStore.subjects.filter((_, idx) => idx % 2 === 0))
 const oddSubjects = computed(() => subjectsStore.subjects.filter((_, idx) => idx % 2 === 1))
 
-const goToSubject = (id) => {
-  router.push(`/subjects/${id}`)
+const goToSubject = (id, name) => {
+  router.push({ path: `/subjects/${id}`, query: { name } })
 }
 
 const handleTabChange = (tab) => {

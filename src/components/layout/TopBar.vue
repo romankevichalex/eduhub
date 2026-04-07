@@ -3,7 +3,7 @@
     <div class="top-bar-title">Мои предметы</div>
     <div class="top-bar-subtitle">Кафедра интеллектуальных систем</div>
   </div>
-  <div class="divider"></div>  <!-- разделитель между кнопками -->
+  <div class="divider"></div>  
 </template>
 
 <style scoped>
