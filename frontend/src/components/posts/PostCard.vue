@@ -2,8 +2,8 @@
   <div class="post-card" @click="$emit('click')">
     <div class="post-content">{{ post.content }}</div>
     <div class="post-meta">
-      <span class="post-date">{{ formattedDate }}</span>
-      <span class="comment-indicator">💬 {{ commentCount }}</span>
+      <span class="post-name">{{ post.last_name }} {{ post.first_name }} {{ post.middle_name }}</span>
+      <span>{{ formattedDate }}</span>
     </div>
   </div>
 </template>
@@ -13,7 +13,6 @@ import { computed } from 'vue'
 
 const props = defineProps({
   post: Object,
-  commentCount: { type: Number, default: 0 }
 })
 
 const formattedDate = computed(() => {
@@ -27,7 +26,7 @@ defineEmits(['click'])
 
 <style scoped>
 .post-card {
-  background: #f8f9fa;
+  background: var(--gray-message);
   border-radius: 27px;
   padding: 16px;
   cursor: pointer;
@@ -42,6 +41,9 @@ defineEmits(['click'])
   line-height: 1.4;
   margin-bottom: 12px;
   color: #1a1a1a;
+}
+.post-name {
+  font-size: 14px;
 }
 .post-meta {
   display: flex;

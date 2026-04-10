@@ -2,14 +2,14 @@
   <div class="comment-item">
     <div class="comment-content">{{ comment.content }}</div>
     <div class="comment-meta">
-      <span>Пользователь {{ comment.author_id }}</span>
+      <span>{{ comment.last_name }} {{ comment.first_name}}</span>
       <span>{{ formattedDate }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { Comment, computed } from 'vue'
 
 const props = defineProps({
   comment: Object
@@ -24,7 +24,7 @@ const formattedDate = computed(() => {
 
 <style scoped>
 .comment-item {
-  background: #f8f9fa;
+  background: var(--gray-message);
   border-radius: 27px;
   padding: 12px 16px;
 }

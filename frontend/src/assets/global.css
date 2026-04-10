@@ -4,6 +4,7 @@
   --gray-3: #bdbdbd;
   --gray-1: #f6f6f6;
   --gray-2: #e8e8e8;
+  --gray-message: #f0f0f0;
   --gradient: linear-gradient(to bottom, var(--main-color-b), var(--main-color-p));
   --brd: 27px;
 }
