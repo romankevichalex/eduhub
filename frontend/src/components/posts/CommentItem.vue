@@ -1,15 +1,15 @@
 <template>
-  <div class="comment-item">
+  <div class="comment-message">
     <div class="comment-content">{{ comment.content }}</div>
     <div class="comment-meta">
-      <span>{{ comment.last_name }} {{ comment.first_name}}</span>
-      <span>{{ formattedDate }}</span>
+      <span class="comment-author">{{ comment.last_name }} {{ comment.first_name }}</span>
+      <span class="comment-time">{{ formattedDate }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { Comment, computed } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   comment: Object
@@ -23,20 +23,31 @@ const formattedDate = computed(() => {
 </script>
 
 <style scoped>
-.comment-item {
-  background: var(--gray-message);
-  border-radius: 27px;
-  padding: 12px 16px;
+.comment-message {
+  max-width: 85%;
+  align-self: flex-start;
+  background: #f0f0f0;
+  border-radius: 20px;
+  border-bottom-left-radius: 4px;
+  padding: 10px 14px;
+  word-wrap: break-word;
 }
+
 .comment-content {
   font-size: 14px;
   line-height: 1.4;
-  margin-bottom: 8px;
 }
+
 .comment-meta {
-  font-size: 11px;
-  color: #888;
   display: flex;
   justify-content: space-between;
+  font-size: 11px;
+  color: #666;
+  margin-top: 6px;
+  gap: 8px;
+}
+
+.comment-author {
+  font-weight: 500;
 }
 </style>
