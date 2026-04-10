@@ -8,9 +8,6 @@ RUN npm run build
 FROM python:3.11-slim
 WORKDIR /app
 
-FROM nginx:alpine
-COPY ./docs /usr/share/nginx/html/docs
-
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV UV_PROJECT_ENVIRONMENT=/usr/local
