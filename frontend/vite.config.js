@@ -50,7 +50,7 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/api': {
-        target: 'https://eduhub-uyvc.onrender.com',
+        target: 'https://eduhub-w8uu.onrender.com',
         changeOrigin: true,
         //secure: false, // если нужно игнорировать SSL (иногда помогает)
         //rewrite: (path) => path.replace(/^\/api/, '') // если у вас в запросах уже есть /api
