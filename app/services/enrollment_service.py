@@ -1,7 +1,12 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+
 from app.models.enrollment import Enrollment
 from app.schemas.enrollment import EnrollmentCreate
+
+
+from app.models.user import User
+from app.models.subject import Subject
 
 def enroll_student(db: Session, user_id: int, data: EnrollmentCreate) -> Enrollment:
     existing = db.query(Enrollment).filter(
@@ -16,13 +21,34 @@ def enroll_student(db: Session, user_id: int, data: EnrollmentCreate) -> Enrollm
     db.refresh(enrollment)
     return enrollment
 
-def get_enrollments(db: Session, user_id: int = None, subject_id: int = None) -> list[Enrollment]:
-    query = db.query(Enrollment)
+def get_enrollments(db: Session, user_id: int = None, subject_id: int = None) -> list:
+    query = db.query(
+        Enrollment,
+        User.first_name,
+        User.middle_name,
+        User.last_name,
+        Subject.name.label("subject_name")
+    ).join(User, Enrollment.user_id == User.id).join(Subject, Enrollment.subject_id == Subject.id)
+
     if user_id:
         query = query.filter(Enrollment.user_id == user_id)
     if subject_id:
         query = query.filter(Enrollment.subject_id == subject_id)
-    return query.all()
+
+    results = query.all()
+    output = []
+    for enrollment, fn, mn, ln, sname in results:
+        enrollment_data = {
+            "id": enrollment.id,
+            "user_id": enrollment.user_id,
+            "first_name": fn,
+            "middle_name": mn,
+            "last_name": ln,
+            "subject_id": enrollment.subject_id,
+            "subject_name": sname,
+        }
+        output.append(enrollment_data)
+    return output 
 
 def delete_enrollment(db: Session, enrollment_id: int, user_id: int) -> None:
     enrollment = db.query(Enrollment).filter(Enrollment.id == enrollment_id).first()
