@@ -34,6 +34,10 @@ app.include_router(admin.router, prefix="/api/v1")
 static_path = os.getenv("STATIC_FILES_DIR", "static")
 app.mount("/static", StaticFiles(directory=static_path), name="static")
 
+@app.get("/health_check")
+async def health_check():
+    return {"status": "ok", "message": "FastAPI backend is running!"}
+
 @app.get("/{full_path:path}")
 async def serve_frontend(full_path: str):
 
@@ -46,7 +50,3 @@ async def serve_frontend(full_path: str):
         return FileResponse(index_path)
 
     return {"detail": "Not Found"}, 404
-
-@app.get("/health_check")
-async def health_check():
-    return {"status": "ok", "message": "FastAPI backend is running!"}
