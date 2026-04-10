@@ -6,6 +6,7 @@ import Icons from 'unplugin-icons/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/static/",
   plugins: [
     vue(),
     Icons({
