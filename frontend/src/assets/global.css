@@ -1,0 +1,29 @@
+:root {
+  --main-color-b: #3B82F6;
+  --main-color-p: #9333EA;
+  --gray-3: #bdbdbd;
+  --gray-1: #f6f6f6;
+  --gray-2: #e8e8e8;
+  --gradient: linear-gradient(to bottom, var(--main-color-b), var(--main-color-p));
+  --brd: 27px;
+}
+
+body {
+  margin: 0;
+  background: var(--gradient);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", Helvetica, Arial, sans-serif;
+  transition: background 0.3s ease;
+}
+
+.card {
+    background-color: white;
+    border-radius: 27px;
+    margin: 10px;
+    overflow: hidden;
+}
+
+h1 {
+   color: #ffffff; 
+   margin: 10px;
+}
