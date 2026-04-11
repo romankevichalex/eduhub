@@ -32,7 +32,7 @@ const formatTime = (iso) => {
 .message.assistant {
   align-self: flex-start;
   background: #f0f0f0;
-  color: #333;
+  color: #1a1a1a;
   border-bottom-left-radius: 4px;
 }
 .message-time {

@@ -137,9 +137,12 @@ watch(() => chatStore.messages.length, () => scrollToBottom(), { flush: 'post' }
   color: white;
   border: none;
   border-radius: 27px;
-  padding: 0 20px;
+  width: 48px;
   cursor: pointer;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
 }
 
 .input-area button:disabled {
