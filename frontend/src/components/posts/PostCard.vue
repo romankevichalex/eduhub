@@ -3,22 +3,21 @@
     <div class="post-content">{{ post.content }}</div>
     <div class="post-meta">
       <span class="post-name">{{ post.last_name }} {{ post.first_name }} {{ post.middle_name }}</span>
-      <span>{{ formattedDate }}</span>
+      <span>{{ formattedTime }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { formatMessageTime } from '@/services/dateFormatter'
 
 const props = defineProps({
   post: Object,
 })
 
-const formattedDate = computed(() => {
-  if (!props.post.created_at) return ''
-  const date = new Date(props.post.created_at)
-  return date.toLocaleDateString('ru-RU')
+const formattedTime = computed(() => {
+  return formatMessageTime(props.post.created_at, {showDate: true})
 })
 
 defineEmits(['click'])

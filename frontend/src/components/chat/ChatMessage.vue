@@ -1,19 +1,21 @@
 <template>
   <div class="message" :class="message.role">
     <div class="message-content">{{ message.content }}</div>
-    <div class="message-time">{{ formatTime(message.created_at) }}</div>
+    <div class="message-time">{{ formattedTime }}</div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+import { formatMessageTime } from '@/services/dateFormatter'
+
+const props = defineProps({
   message: { type: Object, required: true }
 })
 
-const formatTime = (iso) => {
-  if (!iso) return ''
-  return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-}
+const formattedTime = computed(() => {
+  return formatMessageTime(props.message.created_at, {showDate: true})
+})
 </script>
 
 <style scoped>
@@ -28,6 +30,9 @@ const formatTime = (iso) => {
   background: var(--main-color-b);
   color: white;
   border-bottom-right-radius: 4px;
+}
+.message.user .message-time {
+  text-align: right;
 }
 .message.assistant {
   align-self: flex-start;
