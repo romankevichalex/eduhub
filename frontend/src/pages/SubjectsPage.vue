@@ -23,22 +23,23 @@
     <div v-else class="loading">Загрузка...</div>
     <div v-if="subjectsStore.error" class="error">{{ subjectsStore.error }}</div>
 
-    <!-- Плавающие кнопки для администратора -->
     <div v-if="isAdmin" class="fab-container">
-      <button v-if="editMode" class="fab fab-left" @click="openCreateModal">
+    <Transition name="fab-slide">
+      <button v-if="editMode" class="fab fab-create" @click="openCreateModal">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 5v14M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
-      <button class="fab fab-right" @click="toggleEditMode">
-        <svg v-if="!editMode" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17 3l4 4-7 7H10v-4l7-7z M4 20h16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
+    </Transition>
+    <button class="fab fab-edit" @click="toggleEditMode">
+      <svg v-if="!editMode" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 3l4 4-7 7H10v-4l7-7z M4 20h16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
 
     <!-- Модальное окно для создания/редактирования -->
     <SubjectFormModal
@@ -192,14 +193,15 @@ onMounted(() => {
 /* Плавающие кнопки */
 .fab-container {
   position: fixed;
-  bottom: 130px;  /* чуть выше таб-бара */
+  bottom: 80px;
   right: 20px;
-  left: 20px;
+  display: flex;
+  gap: 12px;
   pointer-events: none;
   z-index: 90;
 }
+
 .fab {
-  position: absolute;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -210,16 +212,23 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: 0.2s;
   pointer-events: auto;
+  transition: transform 0.1s ease;
 }
+
 .fab:active {
   transform: scale(0.95);
 }
-.fab-right {
-  right: 0;
+
+/* Анимация для кнопки создания (выезжает слева) */
+.fab-slide-enter-active,
+.fab-slide-leave-active {
+  transition: all 0.2s ease;
 }
-.fab-left {
-  left: 0;
+
+.fab-slide-enter-from,
+.fab-slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);  /* появляется сдвигом справа налево */
 }
 </style>
