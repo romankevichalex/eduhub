@@ -3,19 +3,17 @@
     <TopBar />
 
     <div class="subjects-container" v-if="!subjectsStore.loading">
-      <!-- Левая колонка: чётные индексы -->
       <div class="column">
         <SubjectCard
-          v-for="subject in evenSubjects"
+          v-for="subject in oddSubjects"
           :key="subject.id"
           :name="subject.name"
           @click="handleSubjectClick(subject)"
         />
       </div>
-      <!-- Правая колонка: нечётные индексы -->
       <div class="column">
         <SubjectCard
-          v-for="subject in oddSubjects"
+          v-for="subject in evenSubjects"
           :key="subject.id"
           :name="subject.name"
           @click="handleSubjectClick(subject)"
