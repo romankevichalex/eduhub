@@ -145,11 +145,12 @@ const deleteSubject = () => {
   padding: 10px 12px;
   font-size: 14px;
   box-sizing: border-box;
+  font-family: inherit;
 }
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  gap: 5px;
   margin-top: 20px;
   flex-wrap: wrap;
 }
