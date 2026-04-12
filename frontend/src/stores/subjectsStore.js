@@ -37,9 +37,11 @@ export const useSubjectsStore = defineStore('subjects', {
         const response = await api.post('/api/v1/subjects/', data)
         // Добавляем новый предмет в список (в начало или конец)
         this.subjects.push(response.data)
+        console.log(data)
         return response.data
       } catch (err) {
         this.error = err.response?.data?.message || 'Ошибка создания предмета'
+        console.log(err.response?.data?.message)
         throw err
       }
     },

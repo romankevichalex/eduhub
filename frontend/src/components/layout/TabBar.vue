@@ -63,6 +63,7 @@ const setActive = (tab) => emit('update:activeTab', tab)
   border-top: 2px solid var(--gray-2);   /* серая, более толстая граница */
   padding: 0;
   margin: 0;
+  z-index: 100;
 }
 
 .tab-btn {
