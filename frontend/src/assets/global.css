@@ -21,7 +21,8 @@
 .user-name,
 .user-email,
 .comment-content,
-.post-content {
+.post-content,
+.comment-message {
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
