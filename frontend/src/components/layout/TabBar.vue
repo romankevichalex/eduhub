@@ -21,6 +21,15 @@
     </button>
     <div class="divider"></div>  
     <button
+      v-if="isAdmin"
+      class="tab-btn"
+      :class="{ active: activeTab === 'users' }"
+      @click="setActive('users')"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" class="tab-icon"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="9" cy="9" r="4"/><path d="M16 19c0-3.314-3.134-6-7-6s-7 2.686-7 6m13-6a4 4 0 1 0-3-6.646"/><path d="M22 19c0-3.314-3.134-6-7-6c-.807 0-2.103-.293-3-1.235"/></g></svg>
+    </button>
+    <div v-if="isAdmin" class="divider"></div>  
+    <button
       class="tab-btn"
       :class="{ active: activeTab === 'settings' }"
       @click="setActive('settings')"
@@ -42,6 +51,11 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const authStore = useAuthStore()
+const isAdmin = computed(() => authStore.user?.role === 'admin')
 
 defineProps({
   activeTab: { type: String, default: 'subjects' }

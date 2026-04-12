@@ -139,6 +139,7 @@ const deleteSubject = () => {
 }
 .field input,
 .field textarea {
+  max-width: 100%;
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 27px;

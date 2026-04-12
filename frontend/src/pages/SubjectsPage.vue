@@ -100,9 +100,9 @@ const openCreateModal = () => {
 
 const handleTabChange = (tab) => {
   activeTab.value = tab
-  if (tab === 'settings') {
-    router.push('/settings')
-  }
+  if (tab === 'subjects') router.push('/subjects')
+  else if (tab === 'settings') router.push('/settings')
+  else if (tab === 'users') router.push('/admin/users')
 }
 
 const openEditModal = async (subject) => {

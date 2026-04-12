@@ -9,6 +9,24 @@
   --brd: 27px;
 }
 
+/* Защита от переполнения текстом */
+.text-wrap {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Для всех элементов, где может быть длинный текст */
+.card-text,
+.user-name,
+.user-email,
+.comment-content,
+.post-content {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
 body {
   margin: 0;
   background: var(--gradient);

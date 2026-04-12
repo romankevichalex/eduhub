@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/authStore'
 import SettingsPage from '../pages/SettingsPage.vue'
 import SubjectPage from '@/pages/SubjectPage.vue'
 import CommentsPage from '../pages/CommentsPage.vue'
+import AdminUsersPage from '@/pages/AdminUsersPage.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/subjects/:id/comments/:postId', component: CommentsPage, meta: { requiresAuth: true } },
   { path: '/register', component: RegisterPage, },
   { path: '/settings', component: SettingsPage, meta: { requiresAuth: true } },
+  { path: '/admin/users', component: AdminUsersPage, meta: { requiresAuth: true } },
   // ... другие
 ]
 
@@ -37,6 +39,9 @@ router.beforeEach((to, from, next) => {
     next('/login')
   } else {
     next()
+  }
+  if (to.path.startsWith('/admin') && authStore.user?.role !== 'admin') {
+    next('/subjects')
   }
 })
 
