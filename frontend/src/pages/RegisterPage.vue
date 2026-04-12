@@ -108,6 +108,10 @@ const handleRegister = async () => {
     error.value = 'Пароли не совпадают'
     return
   }
+  if(form.firstName.length > 60 || form.middle_name.length > 60 || form.lastName.length > 60) {
+    error.value = 'Слишком длинное имя, фамилия или отчество!'
+    return
+  }
   if (!form.role) {
     error.value = 'Выберите роль'
     return
