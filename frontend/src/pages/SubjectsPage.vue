@@ -148,7 +148,14 @@ const handleDelete = async () => {
 }
 
 onMounted(() => {
-  subjectsStore.fetchSubjects()
+  if (!authStore.user) {
+    authStore.fetchMe()
+  }
+  if (authStore.user?.role === 'admin') {
+    subjectsStore.fetchAllSubjects()
+  } else {
+    subjectsStore.fetchSubjects()
+  }
 })
 </script>
 

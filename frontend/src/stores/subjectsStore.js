@@ -22,6 +22,20 @@ export const useSubjectsStore = defineStore('subjects', {
       }
     },
 
+    async fetchAllSubjects() {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await api.get('/api/v1/admin/subjects')
+        this.subjects = response.data
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Ошибка загрузки предметов'
+        console.error(err)
+      } finally {
+        this.loading = false
+      }
+    },
+
     async fetchSubjectById(id) {
       try {
         const response = await api.get(`/api/v1/subjects/${id}`)
