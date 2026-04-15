@@ -26,9 +26,9 @@ const activeTab = ref('settings')
 
 const handleTabChange = (tab) => {
   activeTab.value = tab
-  if (tab === 'subjects') {
-    router.push('/subjects')
-  }
+  if (tab === 'subjects') router.push('/subjects')
+  else if (tab === 'settings') router.push('/settings')
+  else if (tab === 'users') router.push('/admin/users')
 }
 </script>
 

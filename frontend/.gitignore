@@ -12,6 +12,7 @@ dev-dist
 dist
 dist-ssr
 *.local
+accs.txt
 
 # Editor directories and files
 .vscode/*

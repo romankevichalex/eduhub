@@ -2,24 +2,22 @@
   <div class="post-card" @click="$emit('click')">
     <div class="post-content">{{ post.content }}</div>
     <div class="post-meta">
-      <span class="post-date">{{ formattedDate }}</span>
-      <span class="comment-indicator">💬 {{ commentCount }}</span>
+      <span class="post-name">{{ post.last_name }} {{ post.first_name }} {{ post.middle_name }}</span>
+      <span>{{ formattedTime }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { formatMessageTime } from '@/services/dateFormatter'
 
 const props = defineProps({
   post: Object,
-  commentCount: { type: Number, default: 0 }
 })
 
-const formattedDate = computed(() => {
-  if (!props.post.created_at) return ''
-  const date = new Date(props.post.created_at)
-  return date.toLocaleDateString('ru-RU')
+const formattedTime = computed(() => {
+  return formatMessageTime(props.post.created_at, {showDate: true})
 })
 
 defineEmits(['click'])
@@ -27,7 +25,7 @@ defineEmits(['click'])
 
 <style scoped>
 .post-card {
-  background: #f8f9fa;
+  background: var(--gray-message);
   border-radius: 27px;
   padding: 16px;
   cursor: pointer;
@@ -42,6 +40,9 @@ defineEmits(['click'])
   line-height: 1.4;
   margin-bottom: 12px;
   color: #1a1a1a;
+}
+.post-name {
+  font-size: 14px;
 }
 .post-meta {
   display: flex;
