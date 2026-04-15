@@ -6,16 +6,17 @@
 
     <!-- Фильтры -->
     <div class="filters">
-      <BaseSelect
-        v-model="filters.role"
-        :options="roleOptions"
-        placeholder="Все роли"
-      />
-      <BaseSelect
-        v-model="filters.verified"
-        :options="verifiedOptions"
-        placeholder="Все статусы"
-      />
+      <select v-model="filters.role">
+        <option value="">Все роли</option>
+        <option value="student">Студент</option>
+        <option value="teacher">Преподаватель</option>
+        <option value="admin">Администратор</option>
+      </select>
+      <select v-model="filters.verified">
+        <option value="">Все статусы</option>
+        <option value="verified">Верифицированы</option>
+        <option value="not_verified">Не верифицированы</option>
+      </select>
     </div>
 
     <div class="users-list" v-if="!usersStore.loading">
@@ -59,7 +60,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUsersStore } from '@/stores/usersStore'
 import TabBar from '@/components/layout/TabBar.vue'
-import BaseSelect from '@/components/ui/BaseSelect.vue'
 
 const router = useRouter()
 const usersStore = useUsersStore()
@@ -70,19 +70,6 @@ const filters = ref({
   role: '',
   verified: ''
 })
-
-const roleOptions = [
-  { value: '', label: 'Все роли' },
-  { value: 'student', label: 'Студент' },
-  { value: 'teacher', label: 'Преподаватель' },
-  { value: 'admin', label: 'Администратор' }
-]
-
-const verifiedOptions = [
-  { value: '', label: 'Все статусы' },
-  { value: 'verified', label: 'Верифицированы' },
-  { value: 'not_verified', label: 'Не верифицированы' }
-]
 
 const filteredUsers = computed(() => {
   let result = [...usersStore.users]
@@ -156,33 +143,11 @@ onMounted(() => {
 
 .filters select {
   flex: 1;
-  padding: 12px 16px;
-  max-width: 100%;
+  padding: 10px;
   border-radius: 27px;
   border: 1px solid #ddd;
   background: white;
   font-size: 14px;
-  font-family: inherit;
-  color: #333;
-  appearance: none;         
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  background-size: 16px;
-  cursor: pointer;
-}
-
-/* Стиль для фокуса */
-.filters select:focus {
-  outline: none;
-  border-color: var(--main-color-b);
-  box-shadow: 0 0 0 2px rgba(var(--main-color-b-rgb), 0.2);
-}
-
-@media (max-width: 480px) {
-  .filters {
-    flex-direction: column;
-  }
 }
 
 .users-list {
