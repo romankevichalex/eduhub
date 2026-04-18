@@ -23,5 +23,12 @@ def verify_user(db: Session, user_id: int) -> User:
     db.refresh(user)
     return user
 
+def delete_user(db: Session, user_id: int) -> None:
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+    db.delete(user)
+    db.commit()
+
 def get_all_subjects(db: Session) -> list[Subject]:
     return db.query(Subject).all()
