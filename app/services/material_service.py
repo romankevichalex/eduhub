@@ -25,6 +25,12 @@ def get_materials(db: Session, subject_id: int = None) -> list[SubjectMaterial]:
         query = query.filter(SubjectMaterial.subject_id == subject_id)
     return query.all()
 
+def get_material_by_id(db: Session, material_id: int) -> SubjectMaterial:
+    material = db.query(SubjectMaterial).filter(SubjectMaterial.id == material_id).first()
+    if not material:
+        raise HTTPException(status_code=404, detail="Материал не найден")
+    return material
+
 def delete_material(db: Session, material_id: int, teacher_id: int) -> None:
     material = db.query(SubjectMaterial).filter(SubjectMaterial.id == material_id).first()
     if not material:
