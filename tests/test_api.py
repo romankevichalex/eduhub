@@ -44,7 +44,7 @@ def test_register_student():
 
 def test_login_admin():
     response = client.post("/api/v1/auth/login", json={
-        "email": "admin_test@test.com",
+        "email": f"admin_{suffix}@test.com",
         "password": "admin123"
     })
     assert response.status_code == 200
@@ -59,7 +59,7 @@ def test_login_wrong_password():
 
 def test_me():
     token = client.post("/api/v1/auth/login", json={
-        "email": "admin_test@test.com",
+        "email": f"admin_{suffix}@test.com",
         "password": "admin123"
     }).json()["access_token"]
 
@@ -67,7 +67,7 @@ def test_me():
         "authorization": f"Bearer {token}"
     })
     assert response.status_code == 200
-    assert response.json()["email"] == "admin_test@test.com"
+    assert response.json()["email"] == f"admin_{suffix}@test.com"
 
 # ───────────────────────────── SUBJECTS ─────────────────────────────
 
@@ -284,3 +284,48 @@ def test_admin_get_subjects(admin_token):
         headers={"authorization": f"Bearer {admin_token}"})
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+# ───────────────────────────── ADMIN DELETE USER ─────────────────────────────
+
+def test_admin_delete_user(admin_token):
+    student_id = client.post("/api/v1/auth/register", json={
+        "email": f"delete_{uuid.uuid4().hex[:6]}@test.com",
+        "first_name": "Delete",
+        "last_name": "Test",
+        "middle_name": "Middle",
+        "password": "delete123",
+        "role": "student"
+    }).json()["id"]
+
+    response = client.delete(f"/api/v1/admin/users/{student_id}",
+        headers={"authorization": f"Bearer {admin_token}"})
+    assert response.status_code == 204
+
+def test_admin_delete_user_not_found(admin_token):
+    response = client.delete("/api/v1/admin/users/99999",
+        headers={"authorization": f"Bearer {admin_token}"})
+    assert response.status_code == 404
+
+def test_admin_delete_user_not_admin(student_token):
+    response = client.delete("/api/v1/admin/users/1",
+        headers={"authorization": f"Bearer {student_token}"})
+    assert response.status_code == 403
+
+# ───────────────────────────── MATERIALS GET BY ID ─────────────────────────────
+
+def test_get_material_by_id(teacher_token, subject_id):
+    material_id = client.post("/api/v1/materials/", json={
+        "subject_id": subject_id,
+        "title": "Тест материал",
+        "description": "Описание",
+        "file_path": "/files/test.pdf",
+        "file_type": "pdf"
+    }, headers={"authorization": f"Bearer {teacher_token}"}).json()["id"]
+
+    response = client.get(f"/api/v1/materials/{material_id}")
+    assert response.status_code == 200
+    assert response.json()["id"] == material_id
+
+def test_get_material_by_id_not_found():
+    response = client.get("/api/v1/materials/99999")
+    assert response.status_code == 404
