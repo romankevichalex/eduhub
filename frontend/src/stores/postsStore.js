@@ -46,5 +46,17 @@ export const usePostsStore = defineStore('posts', {
         return false
       }
     },
+
+    async createPost(subjectId, content) {
+      try {
+        const response = await api.post(`/api/v1/subjects/${subjectId}/posts`, { content })
+        this.posts.unshift(response.data)
+        return true
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Ошибка создания поста'
+        console.error(err)
+        return false
+      }
+    },
   },
 })

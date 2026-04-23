@@ -165,6 +165,11 @@ watch(() => comments.value.length, () => scrollToBottom())
   box-sizing: border-box;
 }
 
+.input-area textarea:focus {
+  outline: none;
+  border-color: var(--main-color-b);
+}
+
 .input-area button {
   background: var(--main-color-b);
   color: white;

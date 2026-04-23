@@ -24,15 +24,31 @@
     </div>
 
     <div class="tab-content">
-      <div v-if="activeTab === 'posts'" class="posts-list">
-        <PostCard
-          v-for="post in postsStore.posts"
-          :key="post.id"
-          :post="post"
-          @click="goToComments(post.id)"
-        />
-        <div v-if="postsStore.loading" class="loading">Загрузка...</div>
-        <div v-else-if="postsStore.posts.length === 0" class="empty">Пока нет постов</div>
+      <div v-if="activeTab === 'posts'" class="posts-tab">
+        <div class="posts-list">
+          <PostCard
+            v-for="post in postsStore.posts"
+            :key="post.id"
+            :post="post"
+            @click="goToComments(post.id)"
+          />
+          <div v-if="postsStore.loading" class="loading">Загрузка...</div>
+          <div v-else-if="postsStore.posts.length === 0" class="empty">Пока нет постов</div>
+        </div>
+
+        <div v-if="canCreatePost" class="input-area">
+          <textarea
+            v-model="newPostContent"
+            @keydown.enter.prevent="submitPost"
+            placeholder="Напишите новый пост..."
+            rows="2"
+          ></textarea>
+          <button @click="submitPost" :disabled="!newPostContent.trim() || creatingPost">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m5 12l-.604-5.437C4.223 5.007 5.825 3.864 7.24 4.535l11.944 5.658c1.525.722 1.525 2.892 0 3.614L7.24 19.466c-1.415.67-3.017-.472-2.844-2.028zm0 0h7" stroke-width="2"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div v-else-if="activeTab === 'ai'" class="ai-chat-container">
@@ -49,22 +65,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'          
 import { useRoute, useRouter } from 'vue-router'
 import { usePostsStore } from '@/stores/postsStore'
+import { useAuthStore } from '@/stores/authStore'       
 import PostCard from '@/components/posts/PostCard.vue'
 import AIChat from '@/components/chat/AIChat.vue'
 
 const route = useRoute()
 const router = useRouter()
 const postsStore = usePostsStore()
+const authStore = useAuthStore()                        
 
 const subjectId = ref(route.params.id)
 const subjectName = ref(route.query.name || 'Предмет')
 const activeTab = ref('posts')
+const newPostContent = ref('')                         
+const creatingPost = ref(false)                       
+
+const canCreatePost = computed(() => {
+  const role = authStore.user?.role
+  return role === 'teacher' || role === 'admin'
+})
 
 const goBack = () => router.push('/subjects')
 const goToComments = (postId) => router.push(`/subjects/${subjectId.value}/comments/${postId}`)
+
+const submitPost = async () => {
+  if (!newPostContent.value.trim() || creatingPost.value) return
+  creatingPost.value = true
+  const success = await postsStore.createPost(subjectId.value, newPostContent.value)
+  if (success) {
+    newPostContent.value = ''
+  } else {
+    alert(postsStore.error || 'Ошибка создания поста')
+  }
+  creatingPost.value = false
+}
 
 onMounted(() => {
   postsStore.fetchPosts(subjectId.value)
@@ -72,9 +109,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
 .subject-page {
   min-height: 100vh;
-  height: 100vh;            /* ← фиксированная высота как в CommentsPage */
+  height: 100vh;
   background: white;
   display: flex;
   flex-direction: column;
@@ -107,7 +145,7 @@ onMounted(() => {
 
 .subject-title {
   color: white;
-  font-size: 16px;          
+  font-size: 16px;
   font-weight: 600;
   margin: 0;
 }
@@ -145,13 +183,11 @@ onMounted(() => {
   overflow: hidden;
 }
 
-.ai-chat-container {
+.posts-tab {
   flex: 1;
-  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 0;
 }
 
 .posts-list {
@@ -161,6 +197,57 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+
+.input-area {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #eee;
+  background: white;
+  flex-shrink: 0;
+}
+.input-area textarea {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 27px;
+  padding: 10px 12px;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.input-area textarea:focus {
+  outline: none;
+  border-color: var(--main-color-b);
+}
+.input-area button {
+  background: var(--main-color-b);
+  color: white;
+  border: none;
+  border-radius: 27px;
+  width: 48px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+.input-area button:disabled {
+  opacity: 0.6;
+}
+.input-area button svg {
+  stroke: white;
+}
+
+.ai-chat-container {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .loading,
