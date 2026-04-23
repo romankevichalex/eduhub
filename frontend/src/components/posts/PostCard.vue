@@ -40,6 +40,7 @@ defineEmits(['click'])
   line-height: 1.4;
   margin-bottom: 12px;
   color: #1a1a1a;
+  white-space: pre-wrap;
 }
 .post-name {
   font-size: 14px;

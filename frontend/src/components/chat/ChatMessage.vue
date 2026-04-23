@@ -31,6 +31,10 @@ const formattedTime = computed(() => {
   color: white;
   border-bottom-right-radius: 4px;
 }
+.message .message-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 .message.user .message-time {
   text-align: right;
 }

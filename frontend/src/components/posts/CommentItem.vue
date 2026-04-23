@@ -55,6 +55,7 @@ const formattedTime = computed(() => {
 .comment-content {
   font-size: 14px;
   line-height: 1.4;
+  white-space: pre-wrap;
 }
 
 .comment-meta {
