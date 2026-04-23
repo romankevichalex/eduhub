@@ -39,7 +39,7 @@
         <div v-if="canCreatePost" class="input-area">
           <textarea
             v-model="newPostContent"
-            @keydown.enter.prevent="submitPost"
+            @keydown="handleKeydown"
             placeholder="Напишите новый пост..."
             rows="2"
           ></textarea>
@@ -101,6 +101,13 @@ const submitPost = async () => {
     alert(postsStore.error || 'Ошибка создания поста')
   }
   creatingPost.value = false
+}
+
+const handleKeydown = (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    submitPost()
+  }
 }
 
 onMounted(() => {

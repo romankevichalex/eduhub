@@ -21,7 +21,7 @@
     <div class="input-area">
       <textarea
         v-model="newMessage"
-        @keydown.enter.prevent="send"
+        @keydown="handleKeydown"
         placeholder="Напишите сообщение..."
         rows="2"
       ></textarea>
@@ -53,7 +53,7 @@ const scrollToBottom = () => {
     if (messagesContainer.value) {
       messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
     }
-    // Дополнительный вызов для надёжности (как в рабочем CommentsPage)
+
     setTimeout(() => {
       if (messagesContainer.value) {
         messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
@@ -77,12 +77,18 @@ const send = async () => {
   }
 }
 
+const handleKeydown = (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    send()
+  }
+}
+
 onMounted(async () => {
   await chatStore.fetchHistory(props.subjectId)
   scrollToBottom()
 })
 
-// Watch с flush: 'post' для гарантии после обновления DOM
 watch(() => chatStore.messages.length, () => scrollToBottom(), { flush: 'post' })
 </script>
 
@@ -99,7 +105,7 @@ watch(() => chatStore.messages.length, () => scrollToBottom(), { flush: 'post' }
 .messages-container {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;         /* как в CommentsPage */
+  padding: 16px;         
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -154,7 +160,6 @@ watch(() => chatStore.messages.length, () => scrollToBottom(), { flush: 'post' }
   opacity: 0.6;
 }
 
-/* Анимация печати */
 .typing .message-content {
   display: flex;
   gap: 4px;

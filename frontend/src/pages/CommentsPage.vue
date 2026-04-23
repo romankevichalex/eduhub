@@ -22,7 +22,7 @@
     <div class="input-area">
       <textarea
         v-model="newComment"
-        @keydown.enter.prevent="submitComment"
+        @keydown="handleKeydown"
         placeholder="Напишите комментарий..."
         rows="2"
       ></textarea>
@@ -84,6 +84,13 @@ const submitComment = async () => {
     alert(postsStore.error || 'Ошибка отправки комментария')
   }
   sending.value = false
+}
+
+const handleKeydown = (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    submitComment()
+  }
 }
 
 onMounted(() => {
