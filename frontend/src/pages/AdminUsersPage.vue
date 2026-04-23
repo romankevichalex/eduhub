@@ -2,6 +2,7 @@
   <div class="users-page">
     <div class="users-header">
       <h1 class="users-title">Управление пользователями</h1>
+      <div class="top-bar-subtitle">Кафедра интеллектуальных систем</div>
     </div>
 
     <!-- Фильтры -->
@@ -144,6 +145,12 @@ onMounted(() => {
   font-size: 24px;
   font-weight: 600;
   margin: 0;
+}
+
+.top-bar-subtitle {
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+  margin-top: 4px;
 }
 
 .filters {

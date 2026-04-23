@@ -24,7 +24,6 @@ export const useUsersStore = defineStore('users', {
     async verifyUser(userId) {
       try {
         await api.patch(`/api/v1/admin/users/${userId}/verify`)
-        // Обновляем статус верификации в списке
         const user = this.users.find(u => u.id === userId)
         if (user) user.is_verified = true
         return true
@@ -33,11 +32,14 @@ export const useUsersStore = defineStore('users', {
         return false
       }
     },
-    // Удаление пока заглушка
     async deleteUser(userId) {
-      // TODO: реализовать после добавления эндпоинта
-      console.log('Удаление пользователя', userId)
-      alert('Функция удаления будет добавлена позже')
+      try {
+        await api.delete(`/api/v1/admin/users/${userId}`)
+        this.users = this.users.filter(u => u.id !== userId)
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Ошибка удаления пользователя'
+        throw err
+      }
     }
   }
 })
